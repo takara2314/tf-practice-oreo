@@ -46,7 +46,7 @@ resource "google_artifact_registry_repository" "oreo-service" {
   format        = "DOCKER"
 }
 
-resource "google_cloud_run_v2_service" "oreo-service-backend" {
+resource "google_cloud_run_v2_service" "oreo-service" {
   name     = google_artifact_registry_repository.oreo-service.repository_id
   location = local.region
 
@@ -67,9 +67,21 @@ resource "google_cloud_run_v2_service" "oreo-service-backend" {
   }
 }
 
-resource "google_cloud_run_service_iam_member" "oreo-service-backend" {
-  service  = google_cloud_run_v2_service.oreo-service-backend.name
-  location = google_cloud_run_v2_service.oreo-service-backend.location
+
+resource "google_cloud_run_domain_mapping" "oreo-service" {
+  name     = "oreo.2314.world"
+  location = google_cloud_run_v2_service.oreo-service.location
+  metadata {
+    namespace = local.project_id
+  }
+  spec {
+    route_name = google_cloud_run_v2_service.oreo-service.name
+  }
+}
+
+resource "google_cloud_run_service_iam_member" "oreo-service" {
+  service  = google_cloud_run_v2_service.oreo-service.name
+  location = google_cloud_run_v2_service.oreo-service.location
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
