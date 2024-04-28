@@ -7,5 +7,7 @@ import (
 )
 
 func HelloWorld(c *gin.Context) {
-	c.String(http.StatusOK, "Hello oreo!")
+	c.JSON(http.StatusOK, gin.H{
+		"message": "こんにちは！オレオ！",
+	})
 }
