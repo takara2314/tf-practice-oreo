@@ -11,3 +11,9 @@ func HelloWorld(c *gin.Context) {
 		"message": "こんにちは！オレオ！",
 	})
 }
+
+func GetOreo(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message": "オレオを取得しました！",
+	})
+}

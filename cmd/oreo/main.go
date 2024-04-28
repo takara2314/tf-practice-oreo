@@ -13,6 +13,7 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/", handler.HelloWorld)
+	router.GET("/oreo", handler.GetOreo)
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
