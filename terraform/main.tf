@@ -7,9 +7,14 @@ terraform {
   }
 }
 
+locals {
+  project_id = "tf-practice-oreo"
+  region     = "asia-northeast1"
+}
+
 provider "google" {
-  project = "tf-practice-oreo"
-  region  = "asia-northeast1"
+  project = local.project_id
+  region  = local.region
 }
 
 resource "google_cloud_run_v2_service" "default" {
@@ -18,7 +23,12 @@ resource "google_cloud_run_v2_service" "default" {
 
   template {
     containers {
-      image = "gcr.io/cloudrun/hello"
+      image = format(
+        "%s.docker.pkg.dev/%s/%s:latest",
+        local.region,
+        local.project_id,
+        "oreo-service"
+      )
       ports {
         container_port = 8080
       }
