@@ -24,7 +24,7 @@ resource "google_cloud_run_v2_service" "default" {
   template {
     containers {
       image = format(
-        "%s.docker.pkg.dev/%s/%s:latest",
+        "%s-docker.pkg.dev/%s/%s:latest",
         local.region,
         local.project_id,
         "oreo-service"

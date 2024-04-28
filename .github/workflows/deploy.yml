@@ -7,7 +7,7 @@ on:
 env:
   GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
   IMAGE: "\
-    asia-northeast1.docker.pkg.dev\
+    asia-northeast1-docker.pkg.dev\
     /tf-practice-oreo\
     /oreo-service:${{ github.sha }}"
 
