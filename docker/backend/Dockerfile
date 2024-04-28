@@ -1,5 +1,5 @@
 # Building image
-FROM 1.22.1-alpine AS builder
+FROM 1.22.2-alpine AS builder
 
 WORKDIR /app
 
