@@ -1,12 +1,3 @@
-terraform {
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "5.26.0"
-    }
-  }
-}
-
 locals {
   project_id = "tf-practice-oreo"
   region     = "asia-northeast1"
@@ -17,15 +8,46 @@ provider "google" {
   region  = local.region
 }
 
-resource "google_artifact_registry_repository" "default" {
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "5.26.0"
+    }
+  }
+  backend "gcs" {
+    bucket = "tf-practice-oreo-terraform-bucket"
+  }
+}
+
+resource "google_storage_bucket" "terraform-state-store" {
+  name          = "tf-practice-oreo-terraform-bucket"
+  location      = local.region
+  storage_class = "REGIONAL"
+
+  versioning {
+    enabled = true
+  }
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+    condition {
+      num_newer_versions = 5
+    }
+  }
+}
+
+resource "google_artifact_registry_repository" "oreo-service" {
   location      = local.region
   repository_id = "oreo-service"
   description   = "main docker repository"
   format        = "DOCKER"
 }
 
-resource "google_cloud_run_v2_service" "default" {
-  name     = google_artifact_registry_repository.default.repository_id
+resource "google_cloud_run_v2_service" "oreo-service-backend" {
+  name     = google_artifact_registry_repository.oreo-service.repository_id
   location = local.region
 
   template {
@@ -34,7 +56,7 @@ resource "google_cloud_run_v2_service" "default" {
         "%s-docker.pkg.dev/%s/%s/%s:latest",
         local.region,
         local.project_id,
-        google_artifact_registry_repository.default.repository_id,
+        google_artifact_registry_repository.oreo-service.repository_id,
         "backend"
       )
       ports {
@@ -44,9 +66,9 @@ resource "google_cloud_run_v2_service" "default" {
   }
 }
 
-resource "google_cloud_run_service_iam_member" "default" {
-  service  = google_cloud_run_v2_service.default.name
-  location = google_cloud_run_v2_service.default.location
+resource "google_cloud_run_service_iam_member" "oreo-service-backend" {
+  service  = google_cloud_run_v2_service.oreo-service-backend.name
+  location = google_cloud_run_v2_service.oreo-service-backend.location
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
