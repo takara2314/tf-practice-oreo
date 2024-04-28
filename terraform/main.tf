@@ -85,3 +85,15 @@ resource "google_cloud_run_service_iam_member" "oreo-service" {
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
+
+resource "google_pubsub_topic" "oreo-news" {
+  name                       = "oreo-news"
+  message_retention_duration = "86600s"
+}
+
+resource "google_pubsub_subscription" "oreo-news-sub" {
+  name  = "oreo-news-sub"
+  topic = google_pubsub_topic.oreo-news.id
+
+  ack_deadline_seconds = 20
+}
