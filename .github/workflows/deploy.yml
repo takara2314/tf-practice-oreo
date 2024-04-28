@@ -40,6 +40,9 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Terraform Change dir
+        run: terraform -chdir=./terraform
+
       - name: Terraform Init
         run: terraform init
 
