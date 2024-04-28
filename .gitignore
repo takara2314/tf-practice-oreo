@@ -7,3 +7,8 @@
 
 # .tfbars files
 *.tfvars
+
+# Air
+post_cmd.txt
+pre_cmd.txt
+tmp
