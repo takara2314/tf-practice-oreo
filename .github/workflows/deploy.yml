@@ -10,6 +10,7 @@ env:
     asia-northeast1-docker.pkg.dev\
     /tf-practice-oreo\
     /oreo-service/backend:${{ github.sha }}"
+  TF_VAR_oreo_service_backend_image_tag: ${{ github.sha }}
 
 jobs:
   deploy:

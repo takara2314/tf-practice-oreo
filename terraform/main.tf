@@ -53,11 +53,12 @@ resource "google_cloud_run_v2_service" "oreo-service-backend" {
   template {
     containers {
       image = format(
-        "%s-docker.pkg.dev/%s/%s/%s:latest",
+        "%s-docker.pkg.dev/%s/%s/%s:%s",
         local.region,
         local.project_id,
         google_artifact_registry_repository.oreo-service.repository_id,
-        "backend"
+        "backend",
+        var.oreo_service_backend_image_tag
       )
       ports {
         container_port = 8080
