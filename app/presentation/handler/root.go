@@ -1,7 +1,11 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 func HelloWorld(c *gin.Context) {
-	c.String("Hello oreo!")
+	c.String(http.StatusOK, "Hello oreo!")
 }

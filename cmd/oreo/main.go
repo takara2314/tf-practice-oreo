@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/takara2314/oreo/app/presentation/handler"
+	"github.com/takara2314/tf-practice-oreo/app/presentation/handler"
 )
 
 func main() {
