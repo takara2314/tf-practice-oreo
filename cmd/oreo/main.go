@@ -13,4 +13,8 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/", handler.HelloWorld)
+
+	if err := router.Run(":8080"); err != nil {
+		log.Fatalf("Failed to run server: %v", err)
+	}
 }
