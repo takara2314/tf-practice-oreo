@@ -17,9 +17,16 @@ provider "google" {
   region  = local.region
 }
 
+resource "google_artifact_registry_repository" "default" {
+  location      = local.region
+  repository_id = "oreo-service"
+  description   = "main docker repository"
+  format        = "DOCKER"
+}
+
 resource "google_cloud_run_v2_service" "default" {
-  name     = "oreo-service"
-  location = "asia-northeast1"
+  name     = google_artifact_registry_repository.default.repository_id
+  location = local.region
 
   template {
     containers {
