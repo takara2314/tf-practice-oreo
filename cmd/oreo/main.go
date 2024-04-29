@@ -26,7 +26,7 @@ func main() {
 	router.GET("/oreo", handler.GetOreo)
 
 	go func() {
-		err := common.Sub.Receive(context.Background(), func(ctx context.Context, msg *pubsub.Message) {
+		err := common.Sub.Receive(ctx, func(ctx context.Context, msg *pubsub.Message) {
 			log.Printf("Got message: %q\n", string(msg.Data))
 			msg.Ack()
 		})

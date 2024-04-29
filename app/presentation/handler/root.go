@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"context"
+	"log"
 	"net/http"
 
 	"cloud.google.com/go/pubsub"
@@ -16,9 +16,14 @@ func HelloWorld(c *gin.Context) {
 }
 
 func GetOreo(c *gin.Context) {
-	common.Topic.Publish(context.Background(), &pubsub.Message{
+	result := common.Topic.Publish(c, &pubsub.Message{
 		Data: []byte("oreo"),
 	})
+	id, err := result.Get(c)
+	if err != nil {
+		log.Fatalf("Failed to publish message: %v", err)
+	}
+	log.Println("Published a message; msg ID: ", id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "オレオを取得しました！",
