@@ -15,6 +15,8 @@ WORKDIR /app
 
 COPY . .
 
+RUN apk add --no-cache curl
+
 RUN go install github.com/cosmtrek/air@latest
 
 EXPOSE 8080

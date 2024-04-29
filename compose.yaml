@@ -9,9 +9,7 @@ services:
     volumes:
       - ./:/app
     environment:
-      - PUBSUB_EMULATOR_HOST=0.0.0.0:8085
-    networks:
-      - gcp-network
+      - PUBSUB_EMULATOR_HOST=pubsub-emulator:8085
     depends_on:
       - pubsub-emulator
 
@@ -23,9 +21,3 @@ services:
       - 8085:8085
     environment:
       - PUBSUB_EMULATOR_HOST=0.0.0.0:8085
-    networks:
-      - gcp-network
-
-networks:
-  gcp-network:
-    driver: bridge

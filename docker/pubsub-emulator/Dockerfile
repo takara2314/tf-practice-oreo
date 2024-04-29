@@ -1,13 +1,15 @@
-FROM google/cloud-sdk:latest
+FROM google/cloud-sdk:473.0.0-emulators
 
-WORKDIR /app
+RUN apt-get update && \
+    apt-get install -y git python3-pip netcat && \
+    git clone https://github.com/googleapis/python-pubsub.git
 
-RUN git clone https://github.com/googleapis/python-pubsub.git
+WORKDIR /python-pubsub/samples/snippets/
 
-WORKDIR /app/python-pubsub/samples/snippets/
+RUN pip3 install -r requirements.txt
 
-RUN pip install -r requirements.txt
+COPY ./docker/pubsub-emulator/entrypoint.sh .
 
 EXPOSE 8085
 
-CMD [ "gcloud", "beta", "emulators", "pubsub", "start", "--project", "tf-practice-oreo" ]
+ENTRYPOINT [ "sh", "./entrypoint.sh" ]
